@@ -15,6 +15,13 @@ def handler(event, context):
     try:
         event = Event(**event)
         posts_data = Post.get_all(page_id=int(event.page_id))
+        for post_data in posts_data:
+            post_data["create_at"] = str(post_data["create_at"])
+            post_data["last_edited_at"] = str(post_data["last_edited_at"])
+
+            for comment_data in post_data["comments"]:
+                comment_data["create_at"] = str(comment_data["create_at"])
+
         response = LbdResponse(
             data=posts_data,
             errors=list(),

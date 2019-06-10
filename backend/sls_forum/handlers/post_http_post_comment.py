@@ -22,8 +22,10 @@ def handler(event, context):
             post_id=event.post_id,
             content=event.content
         )
+        comment_data = comment.to_mongo()
+        comment_data["create_at"] = str(comment_data["create_at"])
         response = LbdResponse(
-            data=comment.to_mongo(),
+            data=comment_data,
             errors=list(),
             success=True,
             status=LbdResponse.StatusCode.Success

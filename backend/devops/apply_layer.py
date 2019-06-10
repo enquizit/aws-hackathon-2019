@@ -19,7 +19,7 @@ api = session.client("apigateway")
 service_name_slug = "sls-forum"
 package_name = "sls_forum"
 stage = "dev"
-layer = "arn:aws:lambda:us-east-1:224233068863:layer:sls_forum:1"
+layer = "arn:aws:lambda:us-east-1:224233068863:layer:sls_forum:2"
 
 # update VPC, Security Group, and Layer
 for submodule in Package("sls_forum.handlers").sub_modules:

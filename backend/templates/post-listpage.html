@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          rel="stylesheet">
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous">
+    </script>
+    <title>Virginia Cyber Range</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Content
+                </th>
+                <th>
+                    Created At
+                </th>
+                </thead>
+                <tbody id="posts">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+		$(function() {
+	    var dataObject = {{ post_listpage_data }}
+			htmlObject = "";
+
+			for (var i = 0; i < dataObject.length; i++) {
+				var htmlCard =  "<td><a href='https://ikqde3ymi8.execute-api.us-east-1.amazonaws.com/dev/post-view/"+dataObject[i]._id+"'>"+dataObject[i].title+"</td>" +
+				"	<td>"+dataObject[i].content+"</td>" +
+				"<td>"+dataObject[i].create_at+"</td>"
+
+  			htmlObject += htmlCard;
+			}
+			document.getElementById("posts").innerHTML = htmlObject;
+		});
+
+</script>
+</body>
+</html>

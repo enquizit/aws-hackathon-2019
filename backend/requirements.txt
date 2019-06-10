@@ -6,3 +6,4 @@ attrs
 attrs_mate==0.0.2
 pathlib_mate==0.0.15
 superjson==0.0.13
+requests

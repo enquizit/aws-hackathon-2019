@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import attr
-from attrs_mate import AttrsClass
+import json
 import mongoengine as me
 from datetime import datetime
 from .base import BaseModel
@@ -37,6 +36,11 @@ class Comment(me.EmbeddedDocument):
     content = me.fields.StringField(required=True)
     create_at = me.fields.DateTimeField(default=lambda: datetime.utcnow())
 
+    def to_html_json(self):
+        dict_data = self.to_mongo()
+        dict_data["create_at"] = str(dict_data["create_at"])
+        return json.dumps(dict_data)
+
 
 class Post(BaseModel):
     title = me.fields.StringField(required=True)
@@ -51,6 +55,14 @@ class Post(BaseModel):
         "db_alias": Config.DB_DATABASE,
         "collection": "post"
     }
+
+    def to_html_json(self):
+        dict_data = self.to_mongo()
+        dict_data["create_at"] = str(dict_data["create_at"])
+        dict_data["last_edited_at"] = str(dict_data["last_edited_at"])
+        for comment_data in dict_data["comments"]:
+            comment_data["create_at"] = str(comment_data["create_at"])
+        return json.dumps(dict_data)
 
     @classmethod
     def post(cls, author_id, title, content):
@@ -80,3 +92,12 @@ class Post(BaseModel):
     def patch(cls, post_id, content):
         cls.objects(_id=post_id).update_one(set__content=content)
 
+
+class Session(BaseModel):
+    user_id = me.fields.StringField()
+    expire_at = me.fields.DateTimeField()
+
+    meta = {
+        "db_alias": Config.DB_DATABASE,
+        "collection": "session"
+    }

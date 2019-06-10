@@ -22,8 +22,11 @@ def handler(event, context):
             title=event.title,
             content=event.content
         )
+        post_data = post.to_mongo()
+        post_data["create_at"] = str(post_data["create_at"])
+        post_data["last_edited_at"] = str(post_data["last_edited_at"])
         response = LbdResponse(
-            data=post.to_mongo(),
+            data=post_data,
             errors=list(),
             success=True,
             status=LbdResponse.StatusCode.Success
