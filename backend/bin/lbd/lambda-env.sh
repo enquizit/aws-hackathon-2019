@@ -14,41 +14,10 @@ dir_project_root=$(dirname "${dir_bin}")
 
 source ${dir_bin}/py/python-env.sh
 
-# load lambda related config from config.json file
-lambda_config_file="${dir_project_root}/config-final-for-shell-script.json"
-if ! [ -e $lambda_config_file ]; then
-    print_colored_line $color_light_red "${lambda_config_file} not found"
-    exit 1
-fi
-
-get_config_value() {
-    local config_key=$1
-    cat ${lambda_config_file} | jq .$config_key -r
-}
-
-service_name=$(get_config_value "SERVICE_NAME")
-aws_profile_for_lambda=$(get_config_value "AWS_PROFILE")
-aws_region_for_lambda=$(get_config_value "AWS_REGION")
-aws_account_id_for_lambda=$(get_config_value "AWS_ACCOUNT_ID")
-aws_account_alias_for_lambda=$(get_config_value "AWS_ACCOUNT_ALIAS")
-stage=$(get_config_value "STAGE")
-
-s3_bucket_lambda_deploy=$(get_config_value "DEPLOYMENT_S3_BUCKET_NAME")
-s3_key_lambda_deploy_service_root=$(get_config_value "S3_KEY_LAMBDA_DEPLOY_SERVICE_ROOT")
-
-s3_key_lambda_deploy_pkg_file=$(get_config_value "S3_KEY_LAMBDA_DEPLOY_PKG_FILE")
-s3_uri_lambda_deploy_pkg_file=$(get_config_value "S3_URI_LAMBDA_DEPLOY_PKG_FILE")
-
-s3_key_lambda_source_file=$(get_config_value "S3_KEY_LAMBDA_SOURCE_FILE")
-s3_uri_lambda_source_file=$(get_config_value "S3_URI_LAMBDA_SOURCE_FILE")
-
-s3_key_lambda_layer_file=$(get_config_value "S3_KEY_LAMBDA_LAYER_FILE")
-s3_uri_lambda_layer_file=$(get_config_value "S3_URI_LAMBDA_LAYER_FILE")
-
 layer_name="${package_name}"
 path_build_lambda_dir="${path_build_dir}/lambda"
 path_run_lambda_site_packages="${path_build_dir}/lambda/site-packages"
-path_run_lambda_site_packages_service_library="${path_run_lambda_site_packages}/${package_name}"
+
 
 # AWS Lambda now support layers, aws highly recommend that zip dependencies
 # as a layer, and only upload source code in your CI / CD
@@ -58,7 +27,17 @@ path_lambda_source_file=${path_build_lambda_dir}/source.zip
 path_lambda_layer_file=${path_build_lambda_dir}/layer.zip
 
 
-aws_console_url_s3_lambda_deploy="https://s3.console.aws.amazon.com/s3/buckets/${s3_bucket_lambda_deploy}/${s3_key_lambda_deploy_service_root}/"
+aws_console_url_s3_lambda_deploy="https://s3.console.aws.amazon.com/s3/buckets/${s3_bucket_lambda_deploy}/lambda/${github_account}/${github_repo_name}/"
+s3_key_lambda_deploy_repo_root="lambda/${github_account}/${github_repo_name}"
+
+s3_key_lambda_deploy_pkg_file="${s3_key_lambda_deploy_repo_root}/deploy-pkg/${package_version}.zip"
+s3_uri_lambda_deploy_pkg_file="s3://${s3_bucket_lambda_deploy}/${s3_key_lambda_deploy_pkg_file}"
+
+s3_key_lambda_source_file="${s3_key_lambda_deploy_repo_root}/source/${package_version}.zip"
+s3_uri_lambda_source_file="s3://${s3_bucket_lambda_deploy}/${s3_key_lambda_source_file}"
+
+s3_key_lambda_layer_file="${s3_key_lambda_deploy_repo_root}/layer/${package_version}.zip"
+s3_uri_lambda_layer_file="s3://${s3_bucket_lambda_deploy}/${s3_key_lambda_layer_file}"
 
 
 path_serverless_yml="${dir_project_root}/serverless.yml"
@@ -212,8 +191,8 @@ invoke_lbd() {
     local tmp_func_name=$1
     local tmp_event_json_file=$2
 
-    if ! [ -e "${path_run_lambda_site_packages_service_library}" ]; then
-        print_colored_line $color_red "${path_run_lambda_site_packages_service_library} not exits!"
+    if ! [ -e "${path_run_lambda_site_packages}" ]; then
+        print_colored_line $color_red "${path_run_lambda_site_packages} not exits!"
         print_colored_line $color_red "do: \"make lbd-build-deploy-pkg\" first!"
         exit 1
     fi

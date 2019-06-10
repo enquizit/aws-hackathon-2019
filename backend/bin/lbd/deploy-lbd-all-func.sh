@@ -11,4 +11,4 @@ source ${dir_bin}/lbd/lambda-env.sh
 
 print_colored_line $color_cyan "[DOING] deploy all functions defined in serverless.yml ..."
 cd ${dir_project_root}
-sls deploy --aws-profile $aws_profile_for_lambda
+sls deploy --aws-profile "${aws_profile_for_lambda}"

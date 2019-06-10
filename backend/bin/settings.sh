@@ -32,6 +32,14 @@ rtd_project_name="sls_forum"
 
 
 #--- AWS Lambda
+# AWS profile name for deploy lambda function
+# should be defined in ~/.aws/credentials
+# read https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html for more information
+aws_profile_for_lambda="eqtest"
+
+# deployment package file will be upload to:
+# "s3://${s3_bucket_lambda_deploy}/lambda/${github_account}/${github_repo_name}/${package_name}-${package_version}.zip"
+s3_bucket_lambda_deploy="eqtest-sls-forum"
 
 # Docker
 # deployment package will be built in this container

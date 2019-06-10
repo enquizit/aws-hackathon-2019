@@ -11,3 +11,5 @@ source ${dir_bin}/lbd/lambda-env.sh
 
 print_colored_line $color_cyan "[DOING] publish layer from ${s3_uri_lambda_layer_file} ..."
 deploy_layer
+
+

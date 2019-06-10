@@ -12,19 +12,22 @@ provider:
   region: us-east-1
   profile: eqtest
   memorySize: 128
-  timeout: 3
+  timeout: 30
   deploymentBucket:
-    name: a-s3-bucket-name
+    name: eqtest-sls-forum
   deploymentPrefix: serverless
-  role: lambda-exeution-role-arn-edit-later
+  role: arn:aws:iam::224233068863:role/lambda-basic-execution
   versionFunctions: false
 
 package:
   artifact: ./build/lambda/source.zip
 
 functions:
-  my_func:
-    handler: sls_forum.handlers.my_func.handler
-    description:
-    layers:
-      - lambda-layer-arn-edit-later
+  user_http_post:
+    handler: sls_forum.handlers.user_http_post.handler
+  user_http_get:
+    handler: sls_forum.handlers.user_http_get.handler
+  post_http_post:
+    handler: sls_forum.handlers.post_http_post.handler
+  post_http_get:
+    handler: sls_forum.handlers.post_http_get.handler

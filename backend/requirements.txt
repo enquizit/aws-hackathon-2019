@@ -1,0 +1,8 @@
+pymongo
+mongoengine
+pymongo_mate==0.0.4
+mongoengine_mate==0.0.3
+attrs
+attrs_mate==0.0.2
+pathlib_mate==0.0.15
+superjson==0.0.13
