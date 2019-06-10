@@ -1,0 +1,30 @@
+# -*- coding: utf-8 -*-
+# all available properties in serverless.yml when provider is aws
+# https://serverless.com/framework/docs/providers/aws/guide/serverless.yml/
+
+service:
+  name: sls-forum
+
+provider:
+  name: aws
+  runtime: python3.6
+  stage: dev
+  region: us-east-1
+  profile: eqtest
+  memorySize: 128
+  timeout: 3
+  deploymentBucket:
+    name: a-s3-bucket-name
+  deploymentPrefix: serverless
+  role: lambda-exeution-role-arn-edit-later
+  versionFunctions: false
+
+package:
+  artifact: ./build/lambda/source.zip
+
+functions:
+  my_func:
+    handler: sls_forum.handlers.my_func.handler
+    description:
+    layers:
+      - lambda-layer-arn-edit-later
