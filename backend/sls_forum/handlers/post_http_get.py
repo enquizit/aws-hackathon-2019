@@ -16,8 +16,11 @@ def handler(event, context):
     try:
         event = Event(**event)
         post = Post.get(_id=event.post_id)
+        post_data = post.to_mongo()
+        post_data["create_at"] = str(post_data["create_at"])
+        post_data["last_edited_at"] = str(post_data["last_edited_at"])
         response = LbdResponse(
-            data=post.to_dict(),
+            data=post_data,
             errors=list(),
             success=True,
             status=LbdResponse.StatusCode.Success,
@@ -35,7 +38,7 @@ def handler(event, context):
             data=list(),
             errors=[(e.__class__.__name__, str(e))],
             success=False,
-            status=LbdResponse.StatusCode.Success,
+            status=LbdResponse.StatusCode.ServerError,
         )
 
     return response.to_dict()

@@ -24,7 +24,7 @@ def handler(event, context):
             password=event.password,
         )
         response = LbdResponse(
-            data=user.to_dict(),
+            data=user.to_mongo(),
             errors=list(),
             success=True,
             status=LbdResponse.StatusCode.Success,

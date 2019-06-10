@@ -6,8 +6,7 @@ from attrs_mate import AttrsClass
 
 @attr.s
 class Event(AttrsClass):
-    author_id = attr.ib()
-    title = attr.ib()
+    post_id = attr.ib()
     content = attr.ib()
 
 
@@ -17,13 +16,12 @@ def handler(event, context):
 
     try:
         event = Event(**event)
-        post = Post.post(
-            author_id=event.author_id,
-            title=event.title,
+        Post.patch(
+            post_id=event.post_id,
             content=event.content
         )
         response = LbdResponse(
-            data=post.to_mongo(),
+            data=dict(),
             errors=list(),
             success=True,
             status=LbdResponse.StatusCode.Success

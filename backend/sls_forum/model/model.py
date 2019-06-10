@@ -29,7 +29,7 @@ class User(BaseModel):
 
 class Author(me.EmbeddedDocument):
     _id = me.fields.StringField()
-    username = me.fields.StringField(required=True, unique=True)
+    username = me.fields.StringField(required=True)
 
 
 class Comment(me.EmbeddedDocument):
@@ -42,7 +42,7 @@ class Post(BaseModel):
     title = me.fields.StringField(required=True)
     content = me.fields.StringField()
     create_at = me.fields.DateTimeField(default=lambda: datetime.utcnow())
-    last_edited_at = me.fields.DateTimeField()
+    last_edited_at = me.fields.DateTimeField(default=lambda: datetime.utcnow())
 
     author = me.fields.EmbeddedDocumentField(Author)
     comments = me.fields.ListField(me.fields.EmbeddedDocumentField(Comment))
@@ -63,6 +63,20 @@ class Post(BaseModel):
         post.save()
         return post
 
-    # @classmethod
-    # def post_comment(cls, post_id, author_id, content):
-    #     pass
+    @classmethod
+    def post_comment(cls, post_id, author_id, content):
+        user = User.get(_id=author_id)
+        comment = Comment(
+            author=Author(
+                _id=user._id,
+                username=user.username,
+            ),
+            content=content,
+        )
+        cls.objects(_id=post_id).update_one(push__comments=comment.to_mongo())
+        return comment
+
+    @classmethod
+    def patch(cls, post_id, content):
+        cls.objects(_id=post_id).update_one(set__content=content)
+

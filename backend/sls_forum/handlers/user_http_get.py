@@ -17,7 +17,7 @@ def handler(event, context):
         event = Event(**event)
         user = User.get(_id=event.user_id)
         response = LbdResponse(
-            data=user.to_dict(),
+            data=user.to_mongo(),
             errors=list(),
             success=True,
             status=LbdResponse.StatusCode.Success,
@@ -35,7 +35,7 @@ def handler(event, context):
             data=list(),
             errors=[(e.__class__.__name__, str(e))],
             success=False,
-            status=LbdResponse.StatusCode.Success,
+            status=LbdResponse.StatusCode.ServerError,
         )
 
     return response.to_dict()

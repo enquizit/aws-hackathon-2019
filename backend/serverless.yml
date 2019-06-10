@@ -27,7 +27,17 @@ functions:
     handler: sls_forum.handlers.user_http_post.handler
   user_http_get:
     handler: sls_forum.handlers.user_http_get.handler
+  user_http_get_all:
+    handler: sls_forum.handlers.user_http_get_all.handler
+
   post_http_post:
     handler: sls_forum.handlers.post_http_post.handler
   post_http_get:
     handler: sls_forum.handlers.post_http_get.handler
+  post_http_get_all:
+    handler: sls_forum.handlers.post_http_get_all.handler
+
+  post_http_post_comment:
+    handler: sls_forum.handlers.post_http_post_comment.handler
+  post_http_patch:
+    handler: sls_forum.handlers.post_http_patch.handler
