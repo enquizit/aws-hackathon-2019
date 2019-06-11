@@ -8,6 +8,14 @@ Virginia Cyber Range Challenge
 Creation of the serverless forum or Q&A system. Like Stackoverflow with Serverless Architect
 
 
+Demo
+------------------------------------------------------------------------------
+
+1. Post List page
+2. Create Post
+3. Put Comment
+
+
 
 Our Work (Enquizit. Inc)
 ------------------------------------------------------------------------------
@@ -18,14 +26,6 @@ Our Work (Enquizit. Inc)
 4. DocumentDB (AWS version of MongoDB) for Storage.
 5. API Gateway with Cache to auto-scale with the traffic load.
 6. Use Single Layer to Power many Lambda function, we can deploy the updates in 1 minutes, because we only update the function codes
-
-
-Demo
-------------------------------------------------------------------------------
-
-1. Post List page
-2. Create Post
-3. Put Comment
 
 
 The Design
@@ -61,12 +61,12 @@ Why API Gateway
         author_id = attr.ib()
         post_id = attr.ib()
         content = attr.ib()
-
-
+    
+    
     def handler(event, context):
         from ..model.model import Post
         from ..api import LbdResponse
-
+    
         try:
             event = Event(**event)
             comment = Post.post_comment(
@@ -87,7 +87,7 @@ Why API Gateway
                 success=False,
                 status=LbdResponse.StatusCode.ServerError,
             )
-
+    
         return response.to_dict()
 
 
@@ -107,4 +107,4 @@ Use Layer and CI-CD
 ------------------------------------------------------------------------------
 
 1. single deployment package for all functions.
-2. put complex logic in ORM layer instead of lambda handler, so we can easily test before we deploy.
+2. put
