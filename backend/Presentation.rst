@@ -61,12 +61,12 @@ Why API Gateway
         author_id = attr.ib()
         post_id = attr.ib()
         content = attr.ib()
-
-
+    
+    
     def handler(event, context):
         from ..model.model import Post
         from ..api import LbdResponse
-
+    
         try:
             event = Event(**event)
             comment = Post.post_comment(
@@ -87,7 +87,7 @@ Why API Gateway
                 success=False,
                 status=LbdResponse.StatusCode.ServerError,
             )
-
+    
         return response.to_dict()
 
 
