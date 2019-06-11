@@ -24,7 +24,7 @@ def handler(event, context):
         Bucket=bucket, Key=key
     )
     html = response["Body"].read().decode("utf-8")
-    html = html.replace("{{ post_data }}", post.to_html_json())
+    html = html.replace("{{ post_data }}", post.to_html_json()).replace("{{ post_id }}", post._id)
     return html
 
 

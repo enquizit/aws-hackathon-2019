@@ -25,17 +25,18 @@ def handler(event, context):
         author=Author(_id=user._id, username=user.username)
     )
     post.save()
+    return "https://ikqde3ymi8.execute-api.us-east-1.amazonaws.com/dev/post-view/{}".format(post._id)
 
-    session = boto3.session.Session()
-    s3 = session.client("s3")
-    bucket = "eqtest-sls-forum"
-    key = "website/post-view.html"
-    response = s3.get_object(
-        Bucket=bucket, Key=key
-    )
-    html = response["Body"].read().decode("utf-8")
-    html = html.replace("{{ post_data }}", post.to_html_json())
-    return html
+    # session = boto3.session.Session()
+    # s3 = session.client("s3")
+    # bucket = "eqtest-sls-forum"
+    # key = "website/post-view.html"
+    # response = s3.get_object(
+    #     Bucket=bucket, Key=key
+    # )
+    # html = response["Body"].read().decode("utf-8")
+    # html = html.replace("{{ post_data }}", post.to_html_json())
+    # return html
 
 
 if __name__ == "__main__":

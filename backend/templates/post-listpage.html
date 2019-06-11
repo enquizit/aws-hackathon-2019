@@ -14,6 +14,8 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
+            <h3 style="text-align: center;">Posts</h3>
+            <a href="https://ikqde3ymi8.execute-api.us-east-1.amazonaws.com/dev/post-create?user_id=7d4da959-2310-40c1-8d62-56163ec67adb">Create Post</a>
             <table class="table table-bordered">
                 <thead>
                 <th>
@@ -24,6 +26,9 @@
                 </th>
                 <th>
                     Created At
+                </th>
+                <th>
+                    Comments
                 </th>
                 </thead>
                 <tbody id="posts">
@@ -38,12 +43,13 @@
 		$(function() {
 	    var dataObject = {{ post_listpage_data }}
 			htmlObject = "";
-
 			for (var i = 0; i < dataObject.length; i++) {
-				var htmlCard =  "<td><a href='https://ikqde3ymi8.execute-api.us-east-1.amazonaws.com/dev/post-view/"+dataObject[i]._id+"'>"+dataObject[i].title+"</td>" +
-				"	<td>"+dataObject[i].content+"</td>" +
-				"<td>"+dataObject[i].create_at+"</td>"
-
+              var htmlCard =  "<tr>" +
+                "<td><a href='https://ikqde3ymi8.execute-api.us-east-1.amazonaws.com/dev/post-view/"+dataObject[i]._id+"'>"+dataObject[i].title+"</td>" +
+                "<td>"+dataObject[i].content+"</td>" +
+                "<td>"+dataObject[i].create_at+"</td>" +
+                "<td>"+dataObject[i].comments.length+"</td>" +
+                "</tr>"
   			htmlObject += htmlCard;
 			}
 			document.getElementById("posts").innerHTML = htmlObject;

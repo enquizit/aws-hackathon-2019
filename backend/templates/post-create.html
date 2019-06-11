@@ -21,6 +21,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
+				<a href="https://ikqde3ymi8.execute-api.us-east-1.amazonaws.com/dev/post-view?page_id=1">Go Back</a>
 				<form action="https://ikqde3ymi8.execute-api.us-east-1.amazonaws.com/dev/post-create" class="form-group" method="POST">
 					<input type="hidden" id="user_id" name="user_id">
 					<h3 style="text-align: center;">Create Post</h3>
@@ -28,13 +29,38 @@
 					<input class="form-control" type="text" id="title" name="title">
 					<label for="content">Content</label>
 					<textarea class="form-control" id="content" name="content"></textarea>
-					<button style="margin-top: 15px;"class="btn btn-primary">Submit</button>
+					<span style="margin-top: 15px;" onclick="createPost()" class="btn btn-primary">Submit</span>
 				</form>
 			</div>
 		</div>
 	</div>
 
 	<script type="text/javascript">
+
+		function createPost() {
+			var data = {
+				user_id : document.getElementById("user_id").value,
+				title: document.getElementById("title").value,
+				content: CKEDITOR.instances.content.getData()
+			}
+			 $.ajax({
+
+					'url' : 'https://ikqde3ymi8.execute-api.us-east-1.amazonaws.com/dev/post-create',
+					'type' : 'POST',
+					'data' : JSON.stringify(data),
+					'success' : function(data) {
+						window.location = data;
+					},
+					'error' : function(request,error)
+
+					{
+						alert("Request: "+JSON.stringify(request));
+					}
+
+				});
+
+		 }
+
 		$(function() {
 			var userId  = "{{ user_id }}";
 			document.getElementById("user_id").value = userId;
