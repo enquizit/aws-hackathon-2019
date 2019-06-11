@@ -1,0 +1,56 @@
+# -*- coding: utf-8 -*-
+# all available properties in serverless.yml when provider is aws
+# https://serverless.com/framework/docs/providers/aws/guide/serverless.yml/
+
+service:
+  name: sls-forum
+
+provider:
+  name: aws
+  runtime: python3.6
+  stage: dev
+  region: us-east-1
+  profile: eqtest
+  memorySize: 128
+  timeout: 30
+  deploymentBucket:
+    name: eqtest-sls-forum
+  deploymentPrefix: serverless
+  role: arn:aws:iam::224233068863:role/lambda-get-put-s3-in-vpc
+  versionFunctions: false
+
+package:
+  artifact: ./build/lambda/source.zip
+
+functions:
+  view_homepage_http_get:
+    handler: sls_forum.handlers.view_homepage_http_get.handler
+  view_post_listpage_http_get:
+    handler: sls_forum.handlers.view_post_listpage_http_get.handler
+  view_post_http_get:
+    handler: sls_forum.handlers.view_post_http_get.handler
+  view_post_create_http_get:
+    handler: sls_forum.handlers.view_post_create_http_get.handler
+  view_post_create_http_post:
+    handler: sls_forum.handlers.view_post_create_http_post.handler
+  view_comment_create_http_post:
+    handler: sls_forum.handlers.view_comment_create_http_post.handler
+
+  user_http_post:
+    handler: sls_forum.handlers.user_http_post.handler
+  user_http_get:
+    handler: sls_forum.handlers.user_http_get.handler
+  user_http_get_all:
+    handler: sls_forum.handlers.user_http_get_all.handler
+
+  post_http_post:
+    handler: sls_forum.handlers.post_http_post.handler
+  post_http_get:
+    handler: sls_forum.handlers.post_http_get.handler
+  post_http_get_all:
+    handler: sls_forum.handlers.post_http_get_all.handler
+
+  post_http_post_comment:
+    handler: sls_forum.handlers.post_http_post_comment.handler
+  post_http_patch:
+    handler: sls_forum.handlers.post_http_patch.handler

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
+    <style>
+        #post p {
+         font-size: 20px;
+        }
+        #post span {
+         font-size: 20px;
+        }
+		p {
+			margin-bottom: 0;
+		}
+		.comment {
+	    border: 1px solid gray;
+	    padding: 15px;
+	    margin-bottom: 15px;
+		}
+
+    </style>
+    <title>Virginia Cyber Range</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div id="post" class="col-md-12">
+            <a href="https://ikqde3ymi8.execute-api.us-east-1.amazonaws.com/dev/post-view?page_id=1">Go Back</a>
+            <h2 style="text-align: center;">View Post</h2>
+            <p style="font-weight: bold;">Author:</p><span id="author"></span>
+            <br>
+            <p style="font-weight: bold;">Title:</p><span id="title"></span>
+            <br>
+            <p style="font-weight: bold;">Content:</p><span id="content"></span>
+            <br>
+            <h4>Comments</h4>
+            <div id="comments">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h4 style="margin-top: 20px;">New Comment</h4>
+            <form>
+                <div class="form-group">
+                    <textarea id="commentcontent" name="commentcontent" class="form-control"></textarea>
+                </div>
+                <span style="margin-top: 15px;" onclick="createPostComment()" class="btn btn-primary">Submit</span>
+            </form>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+        function createPostComment() {
+            var data = {
+                post_id: "{{ post_id }}",
+                user_id: "7d4da959-2310-40c1-8d62-56163ec67adb",
+                content: CKEDITOR.instances.commentcontent.getData()
+            }
+
+            $.ajax({
+                'url' : 'https://ikqde3ymi8.execute-api.us-east-1.amazonaws.com/dev/comment-create',
+                'type' : 'POST',
+                'data' : JSON.stringify(data),
+                'success' : function(data) {
+                    window.location = data;
+                },
+
+                'error' : function(request,error)
+
+                {
+                    alert("Request: "+JSON.stringify(request));
+                }
+
+            });
+
+     	}
+
+		$(function() {
+			CKEDITOR.replace( 'commentcontent' );
+	    	var dataObject = {{ post_data }};
+			var postId  = "{{ post_id }}";
+
+			document.getElementById("title").innerHTML = dataObject.title;
+			document.getElementById("content").innerHTML = dataObject.content;
+			document.getElementById("author").innerHTML = dataObject.author.username;
+			htmlObject = "";			
+			for (var i = 0; i < dataObject.comments.length; i++) { 						
+				var htmlCard =	"<div class='comment'>" +
+						"<p style='font-weight: bold;'>Author:</p>" +
+						"<span>"+dataObject.comments[i].author.username+"</span>" +
+						"<p style='font-weight: bold;'>Content:</p>" +
+						"<span>"+dataObject.comments[i].content+"</span>" +
+						"<p style='font-weight: bold;'>Created At:</p>" +
+                        "<span>"+dataObject.comments[i].create_at+"</span>" +
+					"</div>"
+  			
+  			htmlObject += htmlCard;
+			}
+
+			document.getElementById("comments").innerHTML = htmlObject;
+		
+
+		});
+
+
+
+
+
+
+</script>
+</body>
+</html>
